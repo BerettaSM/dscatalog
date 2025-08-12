@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +24,13 @@ public class CategoryService {
                 .stream()
                 .map(CategoryDTO::from)
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public CategoryDTO findById(Long id) {
+        return categoryRepository.findById(id)
+            .map(CategoryDTO::from)
+            .orElseThrow(ResourceNotFoundException::new);
     }
 
 }
