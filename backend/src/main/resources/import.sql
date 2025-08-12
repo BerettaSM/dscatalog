@@ -1,0 +1,3 @@
+INSERT INTO TBL_CATEGORY (name) VALUES ('Books');
+INSERT INTO TBL_CATEGORY (name) VALUES ('Electronics');
+INSERT INTO TBL_CATEGORY (name) VALUES ('Computers');
