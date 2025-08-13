@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
+import com.devsuperior.dscatalog.domain.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
@@ -29,8 +30,15 @@ public class CategoryService {
     @Transactional(readOnly = true)
     public CategoryDTO findById(Long id) {
         return categoryRepository.findById(id)
-            .map(CategoryDTO::from)
-            .orElseThrow(ResourceNotFoundException::new);
+                .map(CategoryDTO::from)
+                .orElseThrow(ResourceNotFoundException::new);
+    }
+
+    @Transactional
+    public CategoryDTO save(CategoryDTO dto) {
+        Category category = dto.toEntity();
+        Category saved = categoryRepository.save(category);
+        return CategoryDTO.from(saved);
     }
 
 }
