@@ -18,6 +18,10 @@ public class ResourceNotFoundException extends ApplicationException {
         this(message, null, httpStatus);
     }
 
+    public ResourceNotFoundException(Throwable cause, HttpStatus httpStatus) {
+        this(cause.getMessage(), cause, httpStatus);
+    }
+
     public ResourceNotFoundException(String message) {
         this(message, (Throwable) null);
     }

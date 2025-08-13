@@ -28,6 +28,10 @@ public class ApplicationException extends RuntimeException {
         this(message, null, httpStatus);
     }
 
+    public ApplicationException(Throwable cause, HttpStatus httpStatus) {
+        this(cause.getMessage(), cause, httpStatus);
+    }
+
     public ApplicationException(String message) {
         this(message, (Throwable) null);
     }

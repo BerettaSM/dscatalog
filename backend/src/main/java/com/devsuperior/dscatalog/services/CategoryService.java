@@ -3,12 +3,16 @@ package com.devsuperior.dscatalog.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
 import com.devsuperior.dscatalog.domain.entities.Category;
 import com.devsuperior.dscatalog.repositories.CategoryRepository;
+import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -50,6 +54,19 @@ public class CategoryService {
         category.setName(dto.getName());
         Category updated = categoryRepository.save(category);
         return CategoryDTO.from(updated);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public void deleteById(Long id) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResourceNotFoundException();
+        }
+        try {
+            categoryRepository.deleteById(id);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e, HttpStatus.CONFLICT);
+        }
     }
 
 }
