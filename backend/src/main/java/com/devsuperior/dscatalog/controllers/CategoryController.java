@@ -18,6 +18,7 @@ import com.devsuperior.dscatalog.services.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(path = "/categories", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -46,6 +47,14 @@ public class CategoryController {
                 .path("/{id}")
                 .build(saved.getId());
         return ResponseEntity.created(location).body(saved);
+    }
+
+    @PutMapping(path = "/{id}")
+    public ResponseEntity<CategoryDTO> update(
+            @PathVariable Long id,
+            @RequestBody CategoryDTO dto) {
+        CategoryDTO updated = categoryService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 
 }

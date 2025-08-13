@@ -41,4 +41,15 @@ public class CategoryService {
         return CategoryDTO.from(saved);
     }
 
+    @Transactional
+    public CategoryDTO update(Long id, CategoryDTO dto) {
+        if (!categoryRepository.existsById(id)) {
+            throw new ResourceNotFoundException();
+        }
+        Category category = categoryRepository.getReferenceById(id);
+        category.setName(dto.getName());
+        Category updated = categoryRepository.save(category);
+        return CategoryDTO.from(updated);
+    }
+
 }
