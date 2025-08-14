@@ -1,9 +1,9 @@
 package com.devsuperior.dscatalog.services;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,11 +24,9 @@ public class CategoryService {
     private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll() {
-        return categoryRepository.findAll()
-                .stream()
-                .map(CategoryDTO::from)
-                .toList();
+    public Page<CategoryDTO> findAll(Pageable pageable) {
+        return categoryRepository.findAll(pageable)
+                .map(CategoryDTO::from);
     }
 
     @Transactional(readOnly = true)
@@ -63,8 +61,7 @@ public class CategoryService {
         }
         try {
             categoryRepository.deleteById(id);
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException(e, HttpStatus.CONFLICT);
         }
     }
