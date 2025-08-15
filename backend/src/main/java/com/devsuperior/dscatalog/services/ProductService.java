@@ -13,6 +13,7 @@ import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
 import com.devsuperior.dscatalog.domain.dto.ProductDTO;
 import com.devsuperior.dscatalog.domain.entities.Category;
 import com.devsuperior.dscatalog.domain.entities.Product;
+import com.devsuperior.dscatalog.repositories.CategoryRepository;
 import com.devsuperior.dscatalog.repositories.ProductRepository;
 import com.devsuperior.dscatalog.services.exceptions.DatabaseException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -24,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductService {
 
     private final ProductRepository productRepository;
+
+    private final CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(Pageable pageable) {
@@ -40,7 +43,8 @@ public class ProductService {
 
     @Transactional
     public ProductDTO save(ProductDTO dto) {
-        Product product = dto.toEntity();
+        Product product = new Product();
+        copyDtoToEntity(dto, product);
         Product saved = productRepository.save(product);
         return ProductDTO.from(saved);
     }
@@ -76,7 +80,8 @@ public class ProductService {
         entity.setDate(dto.getDate());
         entity.getCategories().clear();
         entity.addCategories(dto.getCategories().stream()
-                .map(CategoryDTO::toEntity)
+                .map(CategoryDTO::getId)
+                .map(categoryRepository::getReferenceById)
                 .toArray(Category[]::new));
     }
 
