@@ -19,12 +19,12 @@ public class CategoryDTO {
         name = entity.getName();
     }
 
-    public static CategoryDTO from(Category entity) {
-        return new CategoryDTO(entity);
-    }
-
     public Category toEntity() {
         return new Category(null, name);
+    }
+    
+    public static CategoryDTO from(Category entity) {
+        return new CategoryDTO(entity);
     }
 
 }
