@@ -54,3 +54,13 @@ INSERT INTO TBL_PRODUCT_CATEGORY (product_id, category_id) VALUES (22, 3);
 INSERT INTO TBL_PRODUCT_CATEGORY (product_id, category_id) VALUES (23, 3);
 INSERT INTO TBL_PRODUCT_CATEGORY (product_id, category_id) VALUES (24, 3);
 INSERT INTO TBL_PRODUCT_CATEGORY (product_id, category_id) VALUES (25, 3);
+
+INSERT INTO TBL_USER (first_name, last_name, email, password) VALUES ('Alex', 'Brown', 'alex@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+INSERT INTO TBL_USER (first_name, last_name, email, password) VALUES ('Maria', 'Green', 'maria@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+
+INSERT INTO TBL_ROLE (authority) VALUES ('ROLE_OPERATOR');
+INSERT INTO TBL_ROLE (authority) VALUES ('ROLE_ADMIN');
+
+INSERT INTO TBL_USER_ROLE (user_id, role_id) VALUES (1, 1);
+INSERT INTO TBL_USER_ROLE (user_id, role_id) VALUES (2, 1);
+INSERT INTO TBL_USER_ROLE (user_id, role_id) VALUES (2, 2);
