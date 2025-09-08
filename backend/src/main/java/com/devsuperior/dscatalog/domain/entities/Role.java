@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "TBL_ROLE")
 public class Role {
     

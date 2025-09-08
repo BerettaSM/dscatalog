@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Data
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@NoArgsConstructor(access = AccessLevel.PACKAGE, force = true)
+@NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "TBL_USER")
 public class User {
     
@@ -34,11 +35,17 @@ public class User {
     private String email;
     private String password;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
         name = "TBL_USER_ROLE",
         joinColumns = @JoinColumn(name = "USER_ID"),
         inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     private final Set<Role> roles = new HashSet<>();
+
+    public void addRoles(Role... roles) {
+        for(Role role: roles) {
+            this.roles.add(role);
+        }
+    }
 
 }
