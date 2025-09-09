@@ -15,6 +15,7 @@ public class SecurityConfig {
         return http
             .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
             .cors(cors -> cors.disable())
+            .csrf(csrf -> csrf.disable())
             .headers(headers -> headers.frameOptions(frame -> frame.disable()))
             .build();
     }

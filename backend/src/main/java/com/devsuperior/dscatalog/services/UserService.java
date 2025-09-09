@@ -55,10 +55,15 @@ public class UserService {
         if (!userRepository.existsById(id)) {
             throw new ResourceNotFoundException();
         }
-        User user = userRepository.getReferenceById(id);
-        copyDtoToEntity(dto, user);
-        User updated = userRepository.save(user);
-        return UserDTO.from(updated);
+        try {
+            User user = userRepository.getReferenceById(id);
+            copyDtoToEntity(dto, user);
+            User updated = userRepository.saveAndFlush(user);
+            return UserDTO.from(updated);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Email already registered", e, HttpStatus.CONFLICT);
+        }
     }
 
     @Transactional(propagation = Propagation.SUPPORTS)
