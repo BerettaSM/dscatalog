@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.RoleDTO;
 import com.devsuperior.dscatalog.domain.dto.UserDTO;
+import com.devsuperior.dscatalog.domain.dto.UserInsertDTO;
 import com.devsuperior.dscatalog.domain.entities.Role;
 import com.devsuperior.dscatalog.domain.entities.User;
 import com.devsuperior.dscatalog.repositories.RoleRepository;
@@ -43,9 +44,10 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO save(UserDTO dto) {
+    public UserDTO save(UserInsertDTO dto) {
         User user = new User();
         copyDtoToEntity(dto, user);
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User saved = userRepository.save(user);
         return UserDTO.from(saved);
     }
@@ -60,8 +62,7 @@ public class UserService {
             copyDtoToEntity(dto, user);
             User updated = userRepository.saveAndFlush(user);
             return UserDTO.from(updated);
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Email already registered", e, HttpStatus.CONFLICT);
         }
     }
@@ -82,13 +83,12 @@ public class UserService {
         entity.setFirstName(dto.getFirstName());
         entity.setLastName(dto.getLastName());
         entity.setEmail(dto.getEmail());
-        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
         entity.getRoles().clear();
         entity.addRoles(
-            dto.getRoles().stream()
-                .map(RoleDTO::getId)
-                .map(roleRepository::getReferenceById)
-                .toArray(Role[]::new));
+                dto.getRoles().stream()
+                        .map(RoleDTO::getId)
+                        .map(roleRepository::getReferenceById)
+                        .toArray(Role[]::new));
     }
 
 }

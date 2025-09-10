@@ -4,8 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.devsuperior.dscatalog.domain.entities.User;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +14,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 @NoArgsConstructor
-@JsonInclude(value = Include.NON_NULL)
 public class UserDTO {
 
     private Long id;
@@ -27,7 +24,6 @@ public class UserDTO {
 
     @Email(message = "Enter a valid email")
     private String email;
-    private String password;
 
     private final Set<RoleDTO> roles = new HashSet<>();
 
@@ -36,7 +32,6 @@ public class UserDTO {
         firstName = entity.getFirstName();
         lastName = entity.getLastName();
         email = entity.getEmail();
-        password = null;
         addRoles(entity.getRoles()
                 .stream()
                 .map(RoleDTO::from)
