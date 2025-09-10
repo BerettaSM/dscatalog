@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.devsuperior.dscatalog.domain.dto.UserDTO;
 import com.devsuperior.dscatalog.services.UserService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> save(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> save(@Valid @RequestBody UserDTO dto) {
         UserDTO saved = userService.save(dto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -54,7 +55,7 @@ public class UserController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDTO> update(
             @PathVariable Long id,
-            @RequestBody UserDTO dto) {
+            @Valid @RequestBody UserDTO dto) {
         UserDTO updated = userService.update(id, dto);
         return ResponseEntity.ok(updated);
     }

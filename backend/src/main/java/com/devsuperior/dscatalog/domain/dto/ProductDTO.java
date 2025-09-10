@@ -6,6 +6,10 @@ import java.util.Set;
 
 import com.devsuperior.dscatalog.domain.entities.Product;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,10 +20,19 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 
     private Long id;
+
+    @Size(min = 5, max = 60, message = "Name must have between 5 and 60 characters")
+    @NotBlank(message = "Required field")
     private String name;
+
+    @NotBlank(message = "Required field")
     private String description;
+
+    @Positive(message = "Price must be positive")
     private Double price;
     private String imgUrl;
+
+    @PastOrPresent(message = "Product date must not be in the future")
     private Instant date;
 
     private final Set<CategoryDTO> categories = new HashSet<>();

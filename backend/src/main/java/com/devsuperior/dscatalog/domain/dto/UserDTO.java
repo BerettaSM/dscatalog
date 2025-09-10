@@ -7,6 +7,8 @@ import com.devsuperior.dscatalog.domain.entities.User;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,8 +20,12 @@ import lombok.NoArgsConstructor;
 public class UserDTO {
 
     private Long id;
+
+    @NotBlank(message = "Field required")
     private String firstName;
     private String lastName;
+
+    @Email(message = "Enter a valid email")
     private String email;
     private String password;
 
