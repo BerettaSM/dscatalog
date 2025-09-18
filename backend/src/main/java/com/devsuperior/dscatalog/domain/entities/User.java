@@ -1,7 +1,11 @@
 package com.devsuperior.dscatalog.domain.entities;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +29,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "TBL_USER")
-public class User {
+public class User implements UserDetails{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,6 +53,16 @@ public class User {
         for(Role role: roles) {
             this.roles.add(role);
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
 }

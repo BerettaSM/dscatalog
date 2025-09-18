@@ -1,5 +1,7 @@
 package com.devsuperior.dscatalog.domain.entities;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor(access = AccessLevel.PUBLIC, force = true)
 @Table(name = "TBL_ROLE")
-public class Role {
+public class Role implements GrantedAuthority{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
