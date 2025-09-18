@@ -1,3 +1,12 @@
+cors:
+    origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
+    methods: ${CORS_METHODS:GET,POST,PUT,PATCH,DELETE,HEAD}
+    headers: ${CORS_HEADERS:Authorization,Content-Type}
+security:
+    client-id: ${CLIENT_ID:myclientid}
+    client-secret: ${CLIENT_SECRET:myclientsecret}
+    jwt:
+        duration: ${JWT_DURATION:86400}
 spring:
     application:
         name: dscatalog

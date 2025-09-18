@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "security.jwt.duration",
+    "type": "java.lang.String",
+    "description": "The JWT token duration in seconds."
+  },
+  {
+    "name": "security.client-id",
+    "type": "java.lang.String",
+    "description": "The client id."
+  },
+  {
+    "name": "security.client-secret",
+    "type": "java.lang.String",
+    "description": "The client secret."
+  },
+  {
+    "name": "cors.origins",
+    "type": "java.lang.String",
+    "description": "The CORS origin urls separated by comma."
+  },
+  {
+    "name": "cors.methods",
+    "type": "java.lang.String",
+    "description": "The CORS allowed methods."
+  },
+  {
+    "name": "cors.headers",
+    "type": "java.lang.String",
+    "description": "The CORS allowed headers."
+  }
+]}
