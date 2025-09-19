@@ -19,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.dscatalog.domain.dto.UserDTO;
 import com.devsuperior.dscatalog.domain.dto.UserInsertDTO;
+import com.devsuperior.dscatalog.security.annotations.AdminOnly;
 import com.devsuperior.dscatalog.services.UserService;
 
 import jakarta.validation.Valid;
@@ -31,18 +32,21 @@ public class UserController {
 
     private final UserService userService;
 
+    @AdminOnly
     @GetMapping
     public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
         Page<UserDTO> page = userService.findAll(pageable);
         return ResponseEntity.ok(page);
     }
 
+    @AdminOnly
     @GetMapping(path = "/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         UserDTO category = userService.findById(id);
         return ResponseEntity.ok(category);
     }
 
+    @AdminOnly
     @PostMapping
     public ResponseEntity<UserDTO> save(@Valid @RequestBody UserInsertDTO dto) {
         UserDTO saved = userService.save(dto);
@@ -53,6 +57,7 @@ public class UserController {
         return ResponseEntity.created(location).body(saved);
     }
 
+    @AdminOnly
     @PutMapping(path = "/{id}")
     public ResponseEntity<UserDTO> update(
             @PathVariable Long id,
@@ -61,6 +66,7 @@ public class UserController {
         return ResponseEntity.ok(updated);
     }
 
+    @AdminOnly
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         userService.deleteById(id);

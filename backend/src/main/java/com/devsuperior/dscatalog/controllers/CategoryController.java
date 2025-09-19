@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
+import com.devsuperior.dscatalog.security.annotations.Authenticated;
 import com.devsuperior.dscatalog.services.CategoryService;
 
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class CategoryController {
         return ResponseEntity.ok(category);
     }
 
+    @Authenticated
     @PostMapping
     public ResponseEntity<CategoryDTO> save(@RequestBody CategoryDTO dto) {
         CategoryDTO saved = categoryService.save(dto);
@@ -51,6 +53,7 @@ public class CategoryController {
         return ResponseEntity.created(location).body(saved);
     }
 
+    @Authenticated
     @PutMapping(path = "/{id}")
     public ResponseEntity<CategoryDTO> update(
             @PathVariable Long id,
@@ -59,6 +62,7 @@ public class CategoryController {
         return ResponseEntity.ok(updated);
     }
 
+    @Authenticated
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         categoryService.deleteById(id);

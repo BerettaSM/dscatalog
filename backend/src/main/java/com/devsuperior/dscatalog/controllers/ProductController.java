@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.dscatalog.domain.dto.ProductDTO;
+import com.devsuperior.dscatalog.security.annotations.Authenticated;
 import com.devsuperior.dscatalog.services.ProductService;
 
 import jakarta.validation.Valid;
@@ -42,6 +43,7 @@ public class ProductController {
         return ResponseEntity.ok(category);
     }
 
+    @Authenticated
     @PostMapping
     public ResponseEntity<ProductDTO> save(@Valid @RequestBody ProductDTO dto) {
         ProductDTO saved = productService.save(dto);
@@ -52,6 +54,7 @@ public class ProductController {
         return ResponseEntity.created(location).body(saved);
     }
 
+    @Authenticated
     @PutMapping(path = "/{id}")
     public ResponseEntity<ProductDTO> update(
             @PathVariable Long id,
@@ -60,6 +63,7 @@ public class ProductController {
         return ResponseEntity.ok(updated);
     }
 
+    @Authenticated
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         productService.deleteById(id);
