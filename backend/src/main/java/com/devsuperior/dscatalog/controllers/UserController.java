@@ -17,36 +17,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.devsuperior.dscatalog.domain.dto.ProductDTO;
-import com.devsuperior.dscatalog.security.annotations.Authenticated;
-import com.devsuperior.dscatalog.services.ProductService;
+import com.devsuperior.dscatalog.domain.dto.UserDTO;
+import com.devsuperior.dscatalog.domain.dto.UserInsertDTO;
+import com.devsuperior.dscatalog.security.annotations.AdminOnly;
+import com.devsuperior.dscatalog.services.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "/products", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
-public class ProductController {
+public class UserController {
 
-    private final ProductService productService;
+    private final UserService userService;
 
+    @AdminOnly
     @GetMapping
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
-        Page<ProductDTO> page = productService.findAll(pageable);
+    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
+        Page<UserDTO> page = userService.findAll(pageable);
         return ResponseEntity.ok(page);
     }
 
+    @AdminOnly
     @GetMapping(path = "/{id}")
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        ProductDTO category = productService.findById(id);
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+        UserDTO category = userService.findById(id);
         return ResponseEntity.ok(category);
     }
 
-    @Authenticated
+    @AdminOnly
     @PostMapping
-    public ResponseEntity<ProductDTO> save(@Valid @RequestBody ProductDTO dto) {
-        ProductDTO saved = productService.save(dto);
+    public ResponseEntity<UserDTO> save(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO saved = userService.save(dto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
@@ -54,19 +57,19 @@ public class ProductController {
         return ResponseEntity.created(location).body(saved);
     }
 
-    @Authenticated
+    @AdminOnly
     @PutMapping(path = "/{id}")
-    public ResponseEntity<ProductDTO> update(
+    public ResponseEntity<UserDTO> update(
             @PathVariable Long id,
-            @Valid @RequestBody ProductDTO dto) {
-        ProductDTO updated = productService.update(id, dto);
+            @Valid @RequestBody UserDTO dto) {
+        UserDTO updated = userService.update(id, dto);
         return ResponseEntity.ok(updated);
     }
 
-    @Authenticated
+    @AdminOnly
     @DeleteMapping(path = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
-        productService.deleteById(id);
+        userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 
