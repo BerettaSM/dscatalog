@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.dscatalog.domain.dto.CategoryDTO;
+import com.devsuperior.dscatalog.domain.entities.User;
 import com.devsuperior.dscatalog.security.annotations.Authenticated;
 import com.devsuperior.dscatalog.services.CategoryService;
 
@@ -31,7 +33,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable) {
+    public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable, @AuthenticationPrincipal User user) {
+        System.out.println("User: " + user);
         Page<CategoryDTO> page = categoryService.findAll(pageable);
         return ResponseEntity.ok(page);
     }
