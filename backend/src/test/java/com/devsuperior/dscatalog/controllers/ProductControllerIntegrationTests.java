@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.ProductDTO;
 import com.devsuperior.dscatalog.tests.Factory;
+import com.devsuperior.dscatalog.tests.TokenUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -33,13 +34,23 @@ public class ProductControllerIntegrationTests {
     private long nonExistingId;
     private long countTotalProducts;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+
+    private String bearerToken;
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws Exception {
         existingId = 1L;
         nonExistingId = 1000L;
         countTotalProducts = 25L;
 
         productDTO = Factory.createProductDTO();
+
+        final String username = "maria@gmail.com";
+        final String password = "123456";
+
+        bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
     }
 
     @Test
@@ -60,6 +71,7 @@ public class ProductControllerIntegrationTests {
     @Test
     public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", nonExistingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDTO)))
@@ -69,6 +81,7 @@ public class ProductControllerIntegrationTests {
     @Test
     public void updateShouldReturnOkWhenIdExists() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", existingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDTO)))
@@ -83,6 +96,7 @@ public class ProductControllerIntegrationTests {
         String expectedImgUrl = productDTO.getImgUrl();
 
         mockMvc.perform(MockMvcRequestBuilders.put("/products/{id}", existingId)
+                .header("Authorization", "Bearer " + bearerToken)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(productDTO)))
