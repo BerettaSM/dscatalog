@@ -1,9 +1,15 @@
 package com.devsuperior.dscatalog.services;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -32,6 +38,23 @@ public class ProductService {
     public Page<ProductDTO> findAll(Pageable pageable) {
         return productRepository.findAll(pageable)
                 .map(ProductDTO::from);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<ProductDTO> findAllByNameAndCategoryIds(
+            String name,
+            List<Long> categoryIds,
+            Pageable pageable) {
+        pageable = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Optional.of(pageable.getSort())
+                        .filter(Sort::isSorted)
+                        .orElse(Sort.by("name")));
+        Page<Long> ids = productRepository.findAllProductIdsByNameAndCategoryIds(name, categoryIds, pageable);
+        List<Product> products = productRepository.findProductsByIds(ids.getContent(), pageable.getSort());
+        return new PageImpl<>(products, ids.getPageable(), ids.getTotalElements())
+                .map(ProductDTO::new);
     }
 
     @Transactional(readOnly = true)
