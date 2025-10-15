@@ -46,7 +46,6 @@ public class UserController {
         return ResponseEntity.ok(category);
     }
 
-    @AdminOnly
     @PostMapping
     public ResponseEntity<UserDTO> save(@Valid @RequestBody UserInsertDTO dto) {
         UserDTO saved = userService.save(dto);

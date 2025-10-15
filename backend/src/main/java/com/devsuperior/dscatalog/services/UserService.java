@@ -57,6 +57,10 @@ public class UserService implements UserDetailsService {
     public UserDTO save(UserInsertDTO dto) {
         User user = new User();
         copyDtoToEntity(dto, user);
+        user.getRoles().clear();
+        Role role = roleRepository.findByAuthority("ROLE_OPERATOR")
+            .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+        user.addRoles(role);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         User saved = userRepository.save(user);
         return UserDTO.from(saved);
