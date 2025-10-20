@@ -28,5 +28,15 @@
     "name": "cors.headers",
     "type": "java.lang.String",
     "description": "The CORS allowed headers."
+  },
+  {
+    "name": "email.password-recovery.token.minutes",
+    "type": "java.lang.String",
+    "description": "A description for 'email.password-recovery.token.minutes'"
+  },
+  {
+    "name": "email.password-recovery.uri",
+    "type": "java.lang.String",
+    "description": "A description for 'email.password-recovery.uri'"
   }
 ]}

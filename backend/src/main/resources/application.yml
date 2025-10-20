@@ -2,6 +2,10 @@ cors:
     origins: ${CORS_ORIGINS:http://localhost:5173,http://localhost:3000}
     methods: ${CORS_METHODS:GET,POST,PUT,PATCH,DELETE,HEAD}
     headers: ${CORS_HEADERS:Authorization,Content-Type}
+email:
+    password-recovery:
+        token.minutes: ${PASSWORD_RECOVERY_TOKEN_MINUTES:30}
+        uri: ${PASSWORD_RECOVERY_URI:http://localhost:5173/recover-password}
 security:
     client-id: ${CLIENT_ID:myclientid}
     client-secret: ${CLIENT_SECRET:myclientsecret}
@@ -14,3 +18,14 @@ spring:
         open-in-view: false
     profiles:
         active: ${APP_PROFILE:dev}
+    mail:
+        host: ${EMAIL_HOST:smtp.gmail.com}
+        port: ${EMAIL_PORT:587}
+        username: ${EMAIL_USERNAME:test@gmail.com}
+        password: ${EMAIL_PASSWORD:123456}
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
