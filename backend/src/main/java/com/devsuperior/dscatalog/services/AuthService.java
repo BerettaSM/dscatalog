@@ -4,15 +4,18 @@ import java.time.Instant;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscatalog.domain.dto.EmailDTO;
+import com.devsuperior.dscatalog.domain.dto.PasswordRecoveryDTO;
 import com.devsuperior.dscatalog.domain.entities.PasswordRecovery;
 import com.devsuperior.dscatalog.domain.entities.User;
 import com.devsuperior.dscatalog.domain.models.EmailModel;
 import com.devsuperior.dscatalog.repositories.PasswordRecoveryRepository;
 import com.devsuperior.dscatalog.repositories.UserRepository;
+import com.devsuperior.dscatalog.services.exceptions.InvalidTokenException;
 import com.devsuperior.dscatalog.services.exceptions.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +29,8 @@ public class AuthService {
 
     private final EmailService emailService;
     private final RecoveryTokenService passwordRecoveryService;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Value("${email.password-recovery.token.minutes}")
     private Integer tokenValidityInMinutes;
@@ -54,6 +59,20 @@ public class AuthService {
 
         EmailModel email = EmailModel.of(user.getEmail(), "Password recovery", body);
         emailService.sendEmail(email);
+    }
+
+    @Transactional
+    public void recoverPassword(PasswordRecoveryDTO dto) {
+        PasswordRecovery recovery = passwordRecoveryRepository
+            .findValidPasswordRecovery(dto.getToken())
+            .orElseThrow(() -> new InvalidTokenException());
+        User user = userRepository.findByEmail(recovery.getEmail())
+            .orElseThrow(() -> new InvalidTokenException());
+        
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        userRepository.save(user);
+        passwordRecoveryRepository.delete(recovery);
     }
     
 }

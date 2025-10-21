@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.devsuperior.dscatalog.domain.dto.EmailDTO;
+import com.devsuperior.dscatalog.domain.dto.PasswordRecoveryDTO;
 import com.devsuperior.dscatalog.services.AuthService;
 
 import jakarta.validation.Valid;
@@ -22,8 +23,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping(path = "/recover-token")
-    public ResponseEntity<Void> createRecoverToken(@Valid @RequestBody EmailDTO dto) {
+    public ResponseEntity<String> createRecoverToken(@Valid @RequestBody EmailDTO dto) {
         authService.createRecoverToken(dto);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping(path = "/new-password")
+    public ResponseEntity<Void> recoverPassword(@Valid @RequestBody PasswordRecoveryDTO dto) {
+        authService.recoverPassword(dto);
         return ResponseEntity.noContent().build();
     }
     
